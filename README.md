@@ -6,9 +6,11 @@ This repository will contain some example implementations for the use of [igniti
 
 To use these examples, you’ll need to have [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/)  installed and working.
 
-## Examples
+Docker Compose allows you to start multiple containers (each container is referred in this context as a "service") and manage them together.  This can really accelerate how to work with Docker containers on a single host.
 
-The examples below demonstrate how to pair a database with your Ignition container.  
+## Sidecar Examples
+
+The examples below demonstrate how to pair a database with your Ignition container as a [sidecar container](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar).    
 
 ### Ignition and MySQL
 
@@ -16,3 +18,12 @@ The examples below demonstrate how to pair a database with your Ignition contain
 
 ### Ignition and Postgres
 
+## Ignition Architecture Examples
+
+These examples show how you can leverage multiple containers (and their inter-communication capabilities) to create multi-gateway architectures with relative ease.
+
+### Vision Gateways + Load Balancer
+
+### Redundant Gateways
+
+### Gateway Network Configuration
