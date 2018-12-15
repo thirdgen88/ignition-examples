@@ -1,0 +1,36 @@
+version: '3'
+services:
+  gateway:
+    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
+    ports:
+      - "8088:8088"
+    volumes:
+      # - ./gateway_backup.gwbk:/restore.gwbk
+      - gateway_data:/var/lib/ignition
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  mssql:
+    build:
+      context: ./mssql
+      dockerfile: Dockerfile
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      # ACCEPT_EULA confirms your acceptance of the End-User Licensing Agreement.
+      ACCEPT_EULA: Y
+      SA_PASSWORD: ch@nge_m3
+      MSSQL_DATABASE: ignition
+      MSSQL_USER: ignition
+      MSSQL_PASSWORD: ignition
+      MSSQL_PID: Developer  # Change to the edition you need, e.g. "Express", "Standard", etc.
+
+volumes:
+  mssql_data:
+  gateway_data:
