@@ -4,6 +4,7 @@ services:
     image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
     ports:
       - "8088:8088"
+    stop_grace_period: 30s
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
       - gateway_data:/var/lib/ignition
