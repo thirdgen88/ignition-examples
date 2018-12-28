@@ -1,10 +1,16 @@
 #!/bin/bash
+set -eo pipefail
+shopt -s nullglob
 
 MSSQL_BASE=/var/opt/mssql
 MSSQL_PROVISIONING_FILE=${MSSQL_BASE}/dbsetup.sql
 export SQLCMDPASSWORD=$SA_PASSWORD
 
-# TODO: Collect and set default values for supported environment variables
+# Collect set default values for supported environment variables
+MSSQL_DATABASE=${MSSQL_DATABASE:-ignition}
+MSSQL_USER=${MSSQL_USER:-ignition}
+MSSQL_PASSWORD=${MSSQL_PASSWORD:-ignition}
+MSSQL_PID=${MSSQL_PID:-Developer}
 
 # Check for Init Complete
 if [ ! -f "${MSSQL_BASE}/.docker-init-complete" ]; then
@@ -18,7 +24,7 @@ if [ ! -f "${MSSQL_BASE}/.docker-init-complete" ]; then
     # Wait up to 60 seconds for database initialization to complete
     echo "Database Startup In Progress"
     for ((i=${MSSQL_STARTUP_DELAY:=60};i>0;i--)); do
-        if /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -l 3 -t 3 -V 16 -Q "SELECT 1" 2>&1 > /dev/null; then
+        if /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -l 1 -t 1 -V 16 -Q "SELECT 1" &> /dev/null; then
             echo "Database healthy, proceeding with provisioning..."
             break
         fi

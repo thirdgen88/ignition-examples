@@ -5,7 +5,7 @@ LABEL maintainer "Kevin Collins <kcollins@purelinux.net>"
 HEALTHCHECK \
     --interval=30s \
     --retries=3 \
-    --start-period=5s \
+    --start-period=15s \
     --timeout=30s \
     CMD SQLCMDPASSWORD=${SA_PASSWORD} sh -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -l 3 -t 3 -V 16 -Q "SELECT 1"'
 

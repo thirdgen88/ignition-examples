@@ -11,6 +11,11 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
   mssql:
     build:
@@ -23,6 +28,11 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
     environment:
       # ACCEPT_EULA confirms your acceptance of the End-User Licensing Agreement.
       ACCEPT_EULA: Y
