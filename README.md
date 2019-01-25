@@ -14,16 +14,20 @@ The examples below demonstrate how to pair a database with your Ignition contain
 
 ### Ignition and MySQL
 
+See [README](ignition-mysql)
+
 ### Ignition and Microsoft SQL Server
 
-### Ignition and Postgres
+See [README](ignition-mssql)
 
 ## Ignition Architecture Examples
 
 These examples show how you can leverage multiple containers (and their inter-communication capabilities) to create multi-gateway architectures with relative ease.
 
-### Vision Gateways + Load Balancer
+<!-- ### Vision Gateways + Load Balancer -->
 
-### Redundant Gateways
+<!-- ### Redundant Gateways -->
 
-### Gateway Network Configuration
+### Multiple Gateways in Gateway Network
+
+See [README](ignition-gwnetwork)
