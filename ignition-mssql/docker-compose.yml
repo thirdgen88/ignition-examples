@@ -14,16 +14,14 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  mssql:
-    build:
-      context: ./mssql
-      dockerfile: Dockerfile
+  db:
+    image: kcollins/mssql:latest
     ports:
       # Note that the 1433 port doesn't need to be published here for the gateway container to connect, 
       # only for external connectivity to the database.
       - 1433:1433
     volumes:
-      - mssql_data:/var/opt/mssql
+      - db_data:/var/opt/mssql
       - ./db-backups:/backups
       - ./db-init:/docker-entrypoint-initdb.d
     logging:
@@ -50,5 +48,5 @@ secrets:
     file: ./secrets/MSSQL_PASSWORD
 
 volumes:
-  mssql_data:
+  db_data:
   gateway_data:

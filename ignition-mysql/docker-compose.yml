@@ -1,4 +1,4 @@
-version: "3"
+version: '3.1'
 services:
   gateway:
     image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
@@ -8,28 +8,41 @@ services:
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
       - gateway_data:/var/lib/ignition
-    deploy:
-      restart_policy:
-        condition: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
-  mysql:
+  db:
     image: mysql:5.7
     ports:
       # Note that the 3306 port doesn't need to be published here for the gateway container to connect, 
       # only for external connectivity to the database.
       - "3306:3306"
     volumes:
-     - mysql_data:/var/lib/mysql
-    deploy:
-      restart_policy:
-        condition: on-failure
+     - db_data:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    secrets:
+      - mysql-root-password
+      - mysql-password
     environment:
       # See https://hub.docker.com/_/mysql/ for more information
-      MYSQL_ROOT_PASSWORD: ch@nge_m3
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql-root-password
       MYSQL_DATABASE: ignition
       MYSQL_USER: ignition
-      MYSQL_PASSWORD: ignition
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql-password
+
+secrets:
+  mysql-root-password:
+    file: ./secrets/MYSQL_ROOT_PASSWORD
+  mysql-password:
+    file: ./secrets/MYSQL_PASSWORD
 
 volumes:
   gateway_data:
-  mysql_data:
+  db_data:
