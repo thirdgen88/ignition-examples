@@ -1,5 +1,7 @@
 # Ignition Docker Examples
 
+_Updated for Ignition 8!_
+
 This repository will contain some example implementations for the use of [ignition-docker](https://github.com/thirdgen88/ignition-docker).
 
 ## Getting Started
@@ -10,7 +12,7 @@ Docker Compose allows you to start multiple containers (each container is referr
 
 ## Sidecar Examples
 
-The examples below demonstrate how to pair a database with your Ignition container as a [sidecar container](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar).    
+The examples below demonstrate how to pair a database with your Ignition container as a [sidecar container](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar).
 
 ### Ignition and MySQL
 

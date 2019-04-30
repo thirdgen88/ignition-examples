@@ -5,6 +5,8 @@ services:
     ports:
       - 8088:8088
     stop_grace_period: 30s
+    secrets:
+      - gateway-password
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
       - gateway_data:/var/lib/ignition
@@ -13,6 +15,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    environment:
+      GATEWAY_ADMIN_PASSWORD_FILE: /run/secrets/gateway-password
 
   db:
     image: kcollins/mssql:latest
@@ -46,6 +50,8 @@ secrets:
     file: ./secrets/SA_PASSWORD
   mssql-password:
     file: ./secrets/MSSQL_PASSWORD
+  gateway-password:
+    file: ./secrets/GATEWAY_PASSWORD
 
 volumes:
   db_data:

@@ -5,6 +5,8 @@ services:
     ports:
       - "8088:8088"
     stop_grace_period: 30s
+    secrets:
+      - gateway-password
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
       - gateway_data:/var/lib/ignition
@@ -13,6 +15,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    environment:
+      GATEWAY_ADMIN_PASSWORD_FILE: /run/secrets/gateway-password
 
   db:
     image: mysql:5.7
@@ -42,6 +46,8 @@ secrets:
     file: ./secrets/MYSQL_ROOT_PASSWORD
   mysql-password:
     file: ./secrets/MYSQL_PASSWORD
+  gateway-password:
+    file: ./secrets/GATEWAY_PASSWORD
 
 volumes:
   gateway_data:

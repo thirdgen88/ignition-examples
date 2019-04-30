@@ -9,7 +9,8 @@ services:
       - hub_data:/var/lib/ignition
     environment:
       GATEWAY_SYSTEM_NAME: hub
-      GATEWAY_NETWORK_AUTOACCEPT_DELAY: 60
+      GATEWAY_ADMIN_PASSWORD: password
+      GATEWAY_NETWORK_AUTOACCEPT_DELAY: 120
 
   spoke1:
     image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
@@ -20,6 +21,7 @@ services:
       - spoke1_data:/var/lib/ignition
     environment:
       GATEWAY_SYSTEM_NAME: spoke1
+      GATEWAY_ADMIN_PASSWORD: password
       GATEWAY_NETWORK_0_HOST: hub
 
   spoke2:
@@ -30,6 +32,7 @@ services:
       - spoke2_data:/var/lib/ignition
     environment:
       GATEWAY_SYSTEM_NAME: spoke2
+      GATEWAY_ADMIN_PASSWORD: password
       GATEWAY_NETWORK_0_HOST: hub
     
 
