@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   gateway:
-    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
+    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `8.0.5`
     ports:
       - "8088:8088"
     stop_grace_period: 30s

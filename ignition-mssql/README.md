@@ -17,6 +17,8 @@ $ echo $(pwgen -1 32) | tee secrets/MSSQL_PASSWORD  # The tee command will echo 
 thot1giengae3euzaiRiet7AiYo0viox
 $ echo $(pwgen -1 32) | tee secrets/SA_PASSWORD
 Soo3mue6kiegai1aeNo9eLahyoj5eucu
+$ echo $(pwgen -1 32) | tee secrets/GATEWAY_PASSWORD
+joomahkaiNabaefaweyeic1iph7shaic
 $ docker-compose up -d && docker-compose logs -f  # Start the stack in detached mode and start to follow the logs (break with Ctrl-C)
 ...
 ```
@@ -42,13 +44,15 @@ Using the guidance there, you can do some other interesting things with this sta
 
 ## Setting up the Secrets
 
-Before you start this stack, you need to define some secrets.  The [docker-compose.yml](docker-compose.yml) file is configured to look for files `MSSQL_PASSWORD` and `SA_PASSWORD` in the `secrets` folder.  If you're on macOS or Linux, you can use the pwgen^1 utility to seed these password files with the commands below:
+Before you start this stack, you need to define some secrets.  The [docker-compose.yml](docker-compose.yml) file is configured to look for files in the `secrets` folder: `MSSQL_PASSWORD` and `SA_PASSWORD` for the database, and `GATEWAY_PASSWORD` for the Ignition Gateway.  If you're on macOS or Linux, you can use the pwgen^1 utility to seed these password files with the commands below:
 
 ```bash
     $ echo $(pwgen -1 32) | tee secrets/MSSQL_PASSWORD
     thot1giengae3euzaiRiet7AiYo0viox
     $ echo $(pwgen -1 32) | tee secrets/SA_PASSWORD
     Soo3mue6kiegai1aeNo9eLahyoj5eucu
+    $ echo $(pwgen -1 32) | tee secrets/GATEWAY_PASSWORD
+    joomahkaiNabaefaweyeic1iph7shaic
 ```
 
 Alternatively, simple place a password of your choosing in the files with a standard text editor.

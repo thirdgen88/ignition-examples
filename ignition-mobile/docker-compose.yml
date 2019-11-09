@@ -1,7 +1,7 @@
 version: '3'
 services:
   gateway:
-    image: kcollins/ignition:7.9.10
+    image: kcollins/ignition:7.9.12
     volumes:
       - gateway_data:/var/lib/ignition
       - x11:/tmp/.X11-unix

@@ -1,7 +1,7 @@
 version: "3"
 services:
   hub:
-    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
+    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `8.0.5`
     ports:
       - "8088:8088"
     volumes:
@@ -13,7 +13,7 @@ services:
       GATEWAY_NETWORK_AUTOACCEPT_DELAY: 120
 
   spoke1:
-    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `7.9.10`
+    image: kcollins/ignition:latest
     ports:
       - "8089:8088"
     volumes:

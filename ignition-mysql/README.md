@@ -17,6 +17,8 @@ $ echo $(pwgen -1 32) | tee secrets/MYSQL_ROOT_PASSWORD  # The tee command will 
 thot1giengae3euzaiRiet7AiYo0viox
 $ echo $(pwgen -1 32) | tee secrets/MYSQL_PASSWORD
 Soo3mue6kiegai1aeNo9eLahyoj5eucu
+$ echo $(pwgen -1 32) | tee secrets/GATEWAY_PASSWORD
+joomahkaiNabaefaweyeic1iph7shaic
 $ docker-compose up -d && docker-compose logs -f  # Start the stack in detached mode and start to follow the logs (break with Ctrl-C)
 ...
 ```
@@ -25,7 +27,7 @@ $ docker-compose up -d && docker-compose logs -f  # Start the stack in detached 
 
 With the sidecar container arrangement, the `gateway` service is able to communicate with the `db` service by-name, without any other special configuration.
 
-By default, the database port `3306` is published to port `3306` on your host computer for easy administration via SQL Server Management Studio (SSMS), for example.  You can either change that port mapping definition to specify an alternative port for the host (e.g. "8306:3306" in order to route host port `8306` into the container's port `3306`) or comment it out altogether if you don't need external connectivity to the database.  The Ignition container will still be able to communicate with the `db` container via the internal network created by `docker-compose up`.
+By default, the database port `3306` is published to port `3306` on your host computer for easy administration via MySQL Workbench, for example.  You can either change that port mapping definition to specify an alternative port for the host (e.g. "8306:3306" in order to route host port `8306` into the container's port `3306`) or comment it out altogether if you don't need external connectivity to the database.  The Ignition container will still be able to communicate with the `db` container via the internal network created by `docker-compose up`.
 
 On the Ignition Gateway configuration webpage, use the following settings for connecting to the database container:
 
@@ -42,13 +44,15 @@ Using the guidance there, you can do some other interesting things with this sta
 
 ## Setting up the Secrets
 
-Before you start this stack, you need to define some secrets.  The [docker-compose.yml](docker-compose.yml) file is configured to look for files `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` in the `secrets` folder.  If you're on macOS or Linux, you can use the pwgen^1 utility to seed these password files with the commands below:
+Before you start this stack, you need to define some secrets.  The [docker-compose.yml](docker-compose.yml) file is configured to look for files in the `secrets` folder: `MYSQL_ROOT_PASSWORD` and `MYSQL_PASSWORD` for the database, and `GATEWAY_PASSWORD` for the Ignition gateway.  If you're on macOS or Linux, you can use the pwgen^1 utility to seed these password files with the commands below:
 
 ```bash
 $ echo $(pwgen -1 32) | tee secrets/MYSQL_ROOT_PASSWORD
 thot1giengae3euzaiRiet7AiYo0viox
 $ echo $(pwgen -1 32) | tee secrets/MYSQL_PASSWORD
 Soo3mue6kiegai1aeNo9eLahyoj5eucu
+$ echo $(pwgen -1 32) | tee secrets/GATEWAY_PASSWORD
+joomahkaiNabaefaweyeic1iph7shaic
 ```
 
 Alternatively, simple place a password of your choosing in the files with a standard text editor.
