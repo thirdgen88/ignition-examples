@@ -9,7 +9,7 @@ services:
       - gateway-password
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
-      - gateway_data:/var/lib/ignition
+      - gateway_data:/var/lib/ignition/data
     logging:
       driver: "json-file"
       options:
