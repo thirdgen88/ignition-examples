@@ -20,4 +20,4 @@ Take a look at the README's for the [kcollins/ignition](http://hub.docker.com/r/
 
 ## Other
 
-_Note_:  When using multiple gateways with this configuration is that your browser will only authenticate to one at a time.  At this time, a workaround for this is to use an alternate browser for interacting with the other gateway.  For example, use Chrome to connect to the `hub` gateway webpage, and use Firefox to connect to the `spokeX` gateways.
+_Note_:  When using multiple gateways with this configuration is that your browser will only authenticate to one at a time.  At this time, a workaround for this is to use an alternate browser for interacting with the other gateway.  For example, use Chrome to connect to the `hub` gateway webpage, and use Firefox to connect to the `spokeX` gateways.  Alternatively, you can edit your systems `hosts` file to add aliases to `127.0.0.1` (localhost) for the names you want to use.  Then, using those names in your browser (still with the appropriate port), it will not prompt you for authentication when you switch between tabs of different containers.

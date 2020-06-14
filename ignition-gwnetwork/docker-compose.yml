@@ -6,11 +6,12 @@ services:
       - "8088:8088"
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
-      - hub_data:/var/lib/ignition
+      - hub_data:/var/lib/ignition/data
     environment:
       GATEWAY_SYSTEM_NAME: hub
       GATEWAY_ADMIN_PASSWORD: password
       GATEWAY_NETWORK_AUTOACCEPT_DELAY: 120
+      GATEWAY_MODULES_ENABLED: vision,perspective,opc-ua,tag-historian,logix-driver
 
   spoke1:
     image: kcollins/ignition:latest
@@ -18,23 +19,24 @@ services:
       - "8089:8088"
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
-      - spoke1_data:/var/lib/ignition
+      - spoke1_data:/var/lib/ignition/data
     environment:
       GATEWAY_SYSTEM_NAME: spoke1
       GATEWAY_ADMIN_PASSWORD: password
       GATEWAY_NETWORK_0_HOST: hub
+      GATEWAY_MODULES_ENABLED: vision,opc-ua,logix-driver
 
   spoke2:
     image: kcollins/ignition:latest-edge
     ports:
       - "8090:8088"
     volumes:
-      - spoke2_data:/var/lib/ignition
+      - spoke2_data:/var/lib/ignition/data
     environment:
       GATEWAY_SYSTEM_NAME: spoke2
       GATEWAY_ADMIN_PASSWORD: password
       GATEWAY_NETWORK_0_HOST: hub
-    
+      GATEWAY_MODULES_ENABLED: vision,opc-ua,logix-drivers
 
 volumes:
   hub_data:
