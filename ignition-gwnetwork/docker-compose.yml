@@ -1,12 +1,17 @@
-version: "3"
+# Ignition Gateway Network Example
+---
+x-ignition-common: &ignition-common
+  image: kcollins/ignition:latest  # You can [and should] change `latest` to a specific version, e.g. `8.1.22`
+  pull_policy: always  # feel free to comment this out if you change from the `latest` tag
+
 services:
   hub:
-    image: kcollins/ignition:latest  # You can change `latest` to a specific version, e.g. `8.0.5`
+    <<: [*ignition-common]
     ports:
       - "8088:8088"
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
-      - hub_data:/var/lib/ignition/data
+      - hub-data:/var/lib/ignition/data
     environment:
       GATEWAY_SYSTEM_NAME: hub
       GATEWAY_ADMIN_PASSWORD: password
@@ -14,12 +19,12 @@ services:
       GATEWAY_MODULES_ENABLED: vision,perspective,opc-ua,tag-historian,logix-driver
 
   spoke1:
-    image: kcollins/ignition:latest
+    <<: [*ignition-common]
     ports:
       - "8089:8088"
     volumes:
       # - ./gateway_backup.gwbk:/restore.gwbk
-      - spoke1_data:/var/lib/ignition/data
+      - spoke1-data:/var/lib/ignition/data
     environment:
       GATEWAY_SYSTEM_NAME: spoke1
       GATEWAY_ADMIN_PASSWORD: password
@@ -27,18 +32,19 @@ services:
       GATEWAY_MODULES_ENABLED: vision,opc-ua,logix-driver
 
   spoke2:
-    image: kcollins/ignition:latest-edge
+    image: kcollins/ignition:latest
     ports:
       - "8090:8088"
     volumes:
-      - spoke2_data:/var/lib/ignition/data
+      - spoke2-data:/var/lib/ignition/data
     environment:
       GATEWAY_SYSTEM_NAME: spoke2
       GATEWAY_ADMIN_PASSWORD: password
       GATEWAY_NETWORK_0_HOST: hub
-      GATEWAY_MODULES_ENABLED: vision,opc-ua,logix-drivers
+      GATEWAY_MODULES_ENABLED: vision,opc-ua,logix-driver
+      IGNITION_EDITION: edge
 
 volumes:
-  hub_data:
-  spoke1_data:
-  spoke2_data:
+  hub-data:
+  spoke1-data:
+  spoke2-data:

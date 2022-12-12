@@ -1,0 +1,68 @@
+# Traefik Demo
+---
+x-traefik-service-global: &traefik-service-global
+  healthcheck:
+    disable: true
+
+x-traefik-service-environment: &traefik-service-environment
+  GATEWAY_PUBLIC_HTTP_PORT: 80
+  GATEWAY_PUBLIC_HTTPS_PORT: 443
+
+services:
+  hub:
+    # We're disabling the healthcheck for this demo so Traefik will always forward
+    <<: [*traefik-service-global]
+    labels:
+      traefik.enable: "true"
+      # Note: the name "hub" here must be unique across all routers defined in Traefik
+      # https://doc.traefik.io/traefik/providers/docker/#port-detection
+      traefik.http.routers.hub.entrypoints: "web"
+      traefik.http.routers.hub.rule: "Host(`hub.localtest.me`)"
+      # https://doc.traefik.io/traefik/providers/docker/#port-detection
+      traefik.http.services.hub.loadbalancer.server.port: 8088
+    environment:
+      <<: [*traefik-service-environment]
+      GATEWAY_PUBLIC_ADDRESS: hub.localtest.me
+  spoke1:
+    # We're disabling the healthcheck for this demo so Traefik will always forward
+    <<: [*traefik-service-global]
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.spoke1.entrypoints: "web"
+      traefik.http.routers.spoke1.rule: "Host(`spoke1.localtest.me`)"
+      traefik.http.services.spoke1.loadbalancer.server.port: 8088
+    environment:
+      GATEWAY_PUBLIC_ADDRESS: spoke1.localtest.me
+      <<: [*traefik-service-environment]
+
+  spoke2:
+    # We're disabling the healthcheck for this demo so Traefik will always forward
+    <<: [*traefik-service-global]
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.spoke2.entrypoints: "web"
+      traefik.http.routers.spoke2.rule: "Host(`spoke2.localtest.me`)"
+      traefik.http.services.spoke2.loadbalancer.server.port: 8088
+    environment:
+      GATEWAY_PUBLIC_ADDRESS: spoke2.localtest.me
+      <<: [*traefik-service-environment]
+
+  proxy:
+    image: traefik:2.9
+    container_name: proxy
+    ports:
+      - 80:80
+    environment:  # https://docs.traefik.io/reference/static-configuration/env/
+      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
+      - TRAEFIK_API_DASHBOARD=true
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_PROVIDERS_DOCKER_NETWORK=proxy
+      - TRAEFIK_PROVIDERS_DOCKER_ALLOWEMPTYSERVICES=true
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.proxy.entrypoints: "web"
+      traefik.http.routers.proxy.rule: "Host(`proxy.localtest.me`)"
+      traefik.http.routers.proxy.service: "api@internal"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
