@@ -10,7 +10,8 @@ Inductive Automation's Ignition [Architectures](https://inductiveautomation.com/
 - [Ignition Enterprise Architecture](enterprise) - Central and Remote Site Gateways with EAM Configuration and site-local Database.
 - [Ignition IIoT Architecture](iiot) - Central and Remote Site Gateways with MQTT/Sparkplug Transport.
 
-> :warning: **These architecture stacks are for demonstration purposes only.  Production deployments should be using SSL/TLS for Gateway Web UI and Gateway Network connections!**
+> [!WARNING]
+> **These architecture stacks are for demonstration purposes only.  Production deployments should be using SSL/TLS for Gateway Web UI and Gateway Network connections!**
 
 ## Prerequisites
 
@@ -26,7 +27,7 @@ Each of the Compose solutions in this repository leverage some common configurab
 
 - `docker-compose.yml` - This is the YAML file that defines the containers and associated configuration for the architecture.
 
-- `secrets` folder - This folder contains secrets that are mapped into a given container and used for setting up credentials.  The files here are referenced within the `secrets:` keys of the `docker-compose.yml`.  Note that the gateway admin password of `password` can be updated by uncommenting the `GATEWAY_ADMIN_*` environment variables in `gw-init/gateway.env` prior to bringing up a given architecture solution.
+- `secrets` folder - **⚠️ WARNING: These secrets exist in-repo for demo purposes only.  Never commit your secrets to source control!** This folder contains secrets that are mapped into a given container and used for setting up credentials.  The files here are referenced within the `secrets:` keys of the `docker-compose.yml`.  Note that the gateway admin password of `password` can be updated by uncommenting the `GATEWAY_ADMIN_*` environment variables in `gw-init/gateway.env` prior to bringing up a given architecture solution.
 
 - `gw-init` folder - This folder contains seed files for the solution that are sourced from the `docker-compose.yml` file.  Items such as gateway backups, gateway network keystores/identifiers, and environment files are used when launching the solution.
 
