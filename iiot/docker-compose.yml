@@ -1,0 +1,102 @@
+# IIoT Architecture Example
+# https://inductiveautomation.com/ignition/architectures
+# https://inductiveautomation.com/static/pdf/IgnitionArchitecture-IIoT-CloudRedundant.pdf
+---
+x-default-logging:
+  &default-logging
+  logging:
+    options:
+      max-size: '100m'
+      max-file: '5'
+    driver: json-file
+
+x-ignition-opts:
+  &ignition-opts
+  <<: *default-logging
+  env_file: gw-init/gateway.env
+  secrets:
+    - gateway-admin-password
+
+services:
+  gateway:
+    <<: *ignition-opts
+    build:
+      context: gw-build
+      dockerfile: Dockerfile
+      args:
+        IGNITION_VERSION: ${IGNITION_VERSION:-latest}
+        SUPPLEMENTAL_MODULES: "mqttdistributor mqttengine"
+        BASE_GWBK_NAME: gateway.gwbk
+        GATEWAY_ADMIN_USERNAME: admin
+      secrets:
+        # NOTE: changing a build secret will not bust the cache, run the build with `--no-cache` to force a rebuild
+        - gateway-admin-password
+    pull_policy: build
+    hostname: gateway
+    ports:
+      - 8088:8088
+      - 1883:1883
+    command: >
+      -n Ignition-gateway
+      -m ${GATEWAY_MAX_MEMORY:-512}
+      -a gateway.localtest.me
+      -h 8088
+      -s 8043
+    volumes:
+      - gateway-data:/usr/local/bin/ignition/data
+      - ./gw-backup/gateway:/backup
+
+  gateway-edge1:
+    <<: *ignition-opts
+    build:
+      context: gw-build
+      dockerfile: Dockerfile
+      args:
+        IGNITION_VERSION: ${IGNITION_VERSION:-latest}
+        SUPPLEMENTAL_MODULES: "mqtttransmission"
+        BASE_GWBK_NAME: edge1.gwbk
+        IGNITION_EDITION: edge
+        GATEWAY_ADMIN_USERNAME: admin
+      secrets:
+        - gateway-admin-password
+    pull_policy: build
+    ports:
+      - 8090:8088
+    command: >
+      -n Ignition-edge1
+      -m ${GATEWAY_MAX_MEMORY:-512}
+      -a gateway-edge1.localtest.me
+      -h 8090
+      -s 8043
+    volumes:
+      - gateway-edge1-data:/usr/local/bin/ignition/data
+      - ./gw-backup/edge1:/backup
+
+  db:
+    <<: *default-logging
+    image: mariadb:${MARIADB_VERSION:-latest}
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_USER: ignition
+      MARIADB_PASSWORD_FILE: /run/secrets/db-ignition-password
+      MARIADB_DATABASE: ignition
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db-root-password
+    secrets:
+      - db-root-password
+      - db-ignition-password
+    volumes:
+      - db-data:/var/lib/mysql
+    
+secrets:
+  gateway-admin-password:
+    file: secrets/gateway-admin-password
+  db-ignition-password:
+    file: secrets/db-ignition-password
+  db-root-password:
+    file: secrets/db-root-password
+
+volumes:
+  gateway-data:
+  gateway-edge1-data:
+  db-data:

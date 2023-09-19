@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Redundancy Settings</comment>
+<entry key="redundancy.gan.pingTimeout">300</entry>
+<entry key="redundancy.activehistorylevel">Full</entry>
+<entry key="redundancy.standbyactivitylevel">Cold</entry>
+<entry key="redundancy.gan.pingRate">1000</entry>
+<entry key="redundancy.runtimeupdatequeuemax">200</entry>
+<entry key="redundancy.gan.enableSsl">true</entry>
+<entry key="redundancy.gan.websocketTimeout">10000</entry>
+<entry key="redundancy.sync.timeoutSecs">60</entry>
+<entry key="redundancy.masterrecoverymode">Automatic</entry>
+<entry key="redundancy.backupfailovertimeout">10000</entry>
+<entry key="redundancy.gan.port">8060</entry>
+<entry key="redundancy.autodetectlocalinterface">true</entry>
+<entry key="redundancy.useActiveUptimeToResolveConflict">false</entry>
+<entry key="redundancy.noderole">Independent</entry>
+<entry key="redundancy.gan.pingMaxMissed">10</entry>
+<entry key="redundancy.bindinterface"></entry>
+<entry key="redundancy.backupreconnectperiod">10000</entry>
+<entry key="redundancy.joinwaittime">30000</entry>
+<entry key="redundancy.systemstaterevision">0</entry>
+<entry key="redundancy.maxdisk_mb">100</entry>
+<entry key="redundancy.systemstateuid">28b34b46-92aa-40da-ab94-24a5d0b8b4d8</entry>
+<entry key="redundancy.gan.httpConnectTimeout">10000</entry>
+<entry key="redundancy.gan.httpReadTimeout">60000</entry>
+<entry key="redundancy.gan.host"></entry>
+</properties>
