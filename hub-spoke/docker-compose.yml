@@ -1,0 +1,153 @@
+# Hub+Spoke Architecture Example
+# https://inductiveautomation.com/ignition/architectures
+# https://inductiveautomation.com/static/pdf/IgnitionArchitecture-HubandSpoke.pdf
+---
+x-default-logging:
+  &default-logging
+  logging:
+    options:
+      max-size: '100m'
+      max-file: '5'
+    driver: json-file
+
+x-ignition-opts:
+  &ignition-opts
+  <<: *default-logging
+  image: inductiveautomation/ignition:${IGNITION_VERSION:-latest}
+  env_file: gw-init/gateway.env
+  secrets:
+    - gateway-admin-password
+
+services:
+  central-gw:
+    <<: *ignition-opts
+    hostname: central-gw
+    ports:
+      - 8088:8088
+      - 8043:8043
+    command: >
+      -n Central
+      -m ${GATEWAY_MAX_MEMORY:-512}
+      -a central-gw.localtest.me
+      -h 8088
+      -s 8043
+      -r /usr/local/bin/ignition/base.gwbk
+    environment:
+      GATEWAY_NETWORK_REQUIRESSL: false
+      GATEWAY_NETWORK_SECURITYPOLICY: SpecifiedList
+      GATEWAY_NETWORK_WHITELIST: local1,remote1
+    networks:
+      - centralnet
+      - local1net
+      - remote1net
+    volumes:
+      - central-gw-data:/usr/local/bin/ignition/data
+      - ./gw-backup/central:/backup
+      - ./gw-init/central-gw.gwbk:/usr/local/bin/ignition/base.gwbk
+
+  local1-gw:
+    <<: *ignition-opts
+    hostname: local1-gw
+    ports:
+      - 8089:8088
+      - 8044:8043
+    command: >
+      -n Local1
+      -m ${GATEWAY_MAX_MEMORY:-512}
+      -a local1-gw.localtest.me
+      -h 8089
+      -s 8044
+      -r /usr/local/bin/ignition/base.gwbk
+    environment:
+      GATEWAY_NETWORK_0_HOST: central-gw
+      GATEWAY_NETWORK_0_PORT: 8088
+      GATEWAY_NETWORK_0_ENABLESSL: false
+      GATEWAY_NETWORK_0_PINGRATE: 5000
+    networks:
+      - centralnet
+      - local1net
+    volumes:
+      - local1-gw-data:/usr/local/bin/ignition/data
+      - ./gw-backup/local1:/backup
+      - ./gw-init/local1-gw.gwbk:/usr/local/bin/ignition/base.gwbk
+
+  remote1-gw:
+    <<: *ignition-opts
+    hostname: remote1-gw
+    ports:
+      - 8090:8088
+      - 8045:8043
+    command: >
+      -n Remote1
+      -m ${GATEWAY_MAX_MEMORY:-512}
+      -a remote1-gw.localtest.me
+      -h 8090
+      -s 8045
+      -r /usr/local/bin/ignition/base.gwbk
+    networks:
+      - centralnet
+      - remote1net
+    environment:
+      GATEWAY_NETWORK_0_HOST: central-gw
+      GATEWAY_NETWORK_0_PORT: 8088
+      GATEWAY_NETWORK_0_ENABLESSL: false
+      GATEWAY_NETWORK_0_PINGRATE: 5000
+    volumes:
+      - remote1-gw-data:/usr/local/bin/ignition/data
+      - ./gw-backup/remote1:/backup
+      - ./gw-init/remote1-gw.gwbk:/usr/local/bin/ignition/base.gwbk
+
+  db:
+    <<: *default-logging
+    image: mariadb:${MARIADB_VERSION:-latest}
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_USER: ignition
+      MARIADB_PASSWORD_FILE: /run/secrets/db-ignition-password
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db-root-password
+    networks:
+      centralnet:
+        aliases:
+          - central-db
+      local1net:
+        aliases:
+          - local1-db
+      remote1net:
+        aliases:
+          - remote1-db
+    secrets:
+      - db-root-password
+      - db-ignition-password
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./sql-init:/docker-entrypoint-initdb.d
+
+  mailhog:
+    <<: *default-logging
+    image: mailhog/mailhog:1.0.1@sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea
+    ports:
+      - 8025:8025
+    networks:
+      centralnet:
+        aliases:
+          - mail
+
+networks:
+  centralnet:
+  local1net:
+  remote1net:
+
+secrets:
+  gateway-admin-password:
+    file: secrets/gateway-admin-password
+  db-ignition-password:
+    file: secrets/db-ignition-password
+  db-root-password:
+    file: secrets/db-root-password
+
+volumes:
+  central-gw-data:
+  local1-gw-data:
+  remote1-gw-data:
+  db-data:
