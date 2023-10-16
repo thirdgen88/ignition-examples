@@ -51,7 +51,8 @@ function register_module() {
     local next_eulas_id license_crc32 module_id
     local -i module_id_check
     next_eulas_id=$( "${SQLITE3[@]}" "SELECT COALESCE(MAX(EULAS_ID)+1,1) FROM EULAS" ) 
-    license_crc32=$( unzip -qq -c "${module_sourcepath}" license.html | gzip -c | tail -c8 | od -t u4 -N 4 -A n | cut -c 2- ) 
+    license_filename=$( unzip -qq -c "${module_sourcepath}" module.xml | grep -oP '(?<=<license>).*(?=</license)' )
+    license_crc32=$( unzip -qq -c "${module_sourcepath}" "${license_filename}" | gzip -c | tail -c8 | od -t u4 -N 4 -A n | cut -c 2- ) 
     module_id=$( unzip -qq -c "${module_sourcepath}" module.xml | grep -oP '(?<=<id>).*(?=</id)' )
     module_id_check=$( "${SQLITE3[@]}" "SELECT CASE WHEN CRC=${license_crc32} THEN -1 ELSE 1 END FROM EULAS WHERE MODULEID='${module_id}'" )
     if (( module_id_check == 1 )); then
