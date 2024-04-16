@@ -2,7 +2,7 @@
 
 With the Ignition enterprise architecture, you can send data from independent local sites and remote sites up to a centralized corporate site and to cloud services.
 
-![Ignition Enterprise Architecture Diagram](https://inductiveautomation.com/static/images/architectures/IgnitionArchitecture-Enterprise@2x.png)
+![Ignition Enterprise Architecture Diagram](https://inductiveautomation.com/static/images/architectures/enterprise-scada-architecture.509ea1a50cff.png)
 
 The Ignition enterprise architecture enables you to create a connected system while also securing data at multiple levels. Connect multiple sites to a central corporate server, and use Ignition Edge to ensure data from critical assets is never compromised. Connecting through a DMZ provides an additional layer of security for transferring and accessing data. The Ignition Gateway connects easily to cloud services like Microsoft Azure, AWS, IBM Cloud, and Google Cloud for storage and analytics.
 

@@ -2,7 +2,7 @@
 
 With the Ignition IIoT architecture you can set up a secure MQTT Message-Oriented Middleware (MOM) infrastructure in the Cloud, on a private on-premise network, or a hybrid of both.
 
-![Ignition IIoT Architecture Diagram](https://inductiveautomation.com/static/images/architectures/ArchitectureDiagram-IIoT@2x.png)
+![Ignition IIoT Architecture Diagram](https://inductiveautomation.com/static/images/architectures/iiot-architecture-diagram.e30f8b355256.png)
 
 Ignition IIoT can collects data from any devices at the edge of the network, publish that data to a central broker, and push that data to subscribed industrial and line-of-business applications. Ignition IIoT can connect to PLCs in the field through the use of the MQTT Transmission module, field devices with Ignition Edge MQTT installed, and/or MQTT-enabled edge gateways and field devices that use the Cirrus Link Sparkplug MQTT specification. This data is published to an MQTT broker, this broker can be located on-premise, in the cloud, or a hybrid of the two. The MQTT Engine module located on an Ignition Gateway can subscribe to any data published from the broker, this data can be use in any Ignition application.
 
