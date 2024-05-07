@@ -33,7 +33,7 @@ Once the solution has been launched, you can begin to access the services at:
 - Edge Gateway 1 - http://gateway-edge1.localtest.me:8090
 - MariaDB Database - `localhost:3306`
 
-Default admin credentials for Ignition Gateways are `admin` / `password`. Default admin credentials for MariaDB are `root` / `ignition`.
+Default admin credentials for Ignition Gateways are `admin` / `password`. Default admin credentials for MariaDB are `root` / `ignition`. Default MQTT Distributor credentials are `admin` / `changeme`.
 
 ## Monitor
 
